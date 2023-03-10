@@ -50,6 +50,13 @@ def categories(request):
         return Response(serialized_item.data, status.HTTP_201_CREATED)
 
 
+@api_view()
+def single_category(request, id):
+    item = get_object_or_404(Category, pk=id)
+    serialized_item = CategorySerializer(item)
+    return Response(serialized_item.data)
+
+
 # class MenuItemsView(generics.ListCreateAPIView):
 #     queryset = MenuItem.objects.all()
 #     serializer_class = MenuItemSerializer
