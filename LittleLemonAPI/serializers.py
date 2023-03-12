@@ -23,6 +23,10 @@ class MenuItemSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'price', 'stock',
                   'price_after_tax', 'category', 'category_id']
 
+        extra_kwargs = {
+            'price': {'min_value': 2},
+        }
+
     def calculate_tax(self, product: MenuItem):
         return product.price * Decimal(1.1)
 

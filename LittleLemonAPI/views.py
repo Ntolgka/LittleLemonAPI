@@ -7,59 +7,65 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 
 
-@api_view(['GET', 'POST'])
-def menu_items(request):
-
-    if request.method == 'GET':
-        items = MenuItem.objects.select_related('category').all()
-        serialized_item = MenuItemSerializer(items, many=True)
-        return Response(serialized_item.data)
-
-    if request.method == 'POST':
-        serialized_item = MenuItemSerializer(data=request.data)
-        serialized_item.is_valid(raise_exception=True)
-        # serialized_item._validated_data     # Accessing validated data
-        serialized_item.save()  # Save the record in the database
-
-        # Access the method after saving it (You can't without save!)
-        return Response(serialized_item.data, status.HTTP_201_CREATED)
+class MenuItemsView(generics.ListCreateAPIView):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemSerializer
 
 
-@api_view()
-def single_item(request, id):
-    item = get_object_or_404(MenuItem, pk=id)
-    serialized_item = MenuItemSerializer(item)
-    return Response(serialized_item.data)
+class SingleMenuItemView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemSerializer
 
 
-@api_view(['GET', 'POST'])
-def categories(request):
-
-    if request.method == 'GET':
-        items = Category.objects.all()
-        serialized_item = CategorySerializer(items, many=True)
-        return Response(serialized_item.data)
-
-    if request.method == 'POST':
-        serialized_item = CategorySerializer(data=request.data)
-        serialized_item.is_valid(raise_exception=True)
-        # serialized_item._validated_data     # Accessing validated data
-        serialized_item.save()  # Save the record in the database
-
-        # Access the method after saving it (You can't without save!)
-        return Response(serialized_item.data, status.HTTP_201_CREATED)
+class CategoriesView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
-@api_view()
-def single_category(request, id):
-    item = get_object_or_404(Category, pk=id)
-    serialized_item = CategorySerializer(item)
-    return Response(serialized_item.data)
+class SingleCategoryView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
-# class MenuItemsView(generics.ListCreateAPIView):
-#     queryset = MenuItem.objects.all()
-#     serializer_class = MenuItemSerializer
-# class SingleMenuItemView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
-#     queryset = MenuItem.objects.all()
-#     serializer_class = MenuItemSerializer
+# Before Generic View:
+
+# @api_view(['GET', 'POST'])
+# def menu_items(request):
+#     if request.method == 'GET':
+#         items = MenuItem.objects.select_related('category').all()
+#         serialized_item = MenuItemSerializer(items, many=True)
+#         return Response(serialized_item.data)
+#     if request.method == 'POST':
+#         serialized_item = MenuItemSerializer(data=request.data)
+#         serialized_item.is_valid(raise_exception=True)
+#         # serialized_item._validated_data     # Accessing validated data
+#         serialized_item.save()  # Save the record in the database
+#         # Access the method after saving it (You can't without save!)
+#         return Response(serialized_item.data, status.HTTP_201_CREATED)
+
+# @api_view()
+# def single_item(request, id):
+#     item = get_object_or_404(MenuItem, pk=id)
+#     serialized_item = MenuItemSerializer(item)
+#     return Response(serialized_item.data)
+
+
+# @api_view(['GET', 'POST'])
+# def categories(request):
+#     if request.method == 'GET':
+#         items = Category.objects.all()
+#         serialized_item = CategorySerializer(items, many=True)
+#         return Response(serialized_item.data)
+#     if request.method == 'POST':
+#         serialized_item = CategorySerializer(data=request.data)
+#         serialized_item.is_valid(raise_exception=True)
+#         # serialized_item._validated_data     # Accessing validated data
+#         serialized_item.save()  # Save the record in the database
+#         # Access the method after saving it (You can't without save!)
+#         return Response(serialized_item.data, status.HTTP_201_CREATED)
+
+# @api_view()
+# def single_category(request, id):
+#     item = get_object_or_404(Category, pk=id)
+#     serialized_item = CategorySerializer(item)
+#     return Response(serialized_item.data)
