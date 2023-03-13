@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 
 # class MenuItemsView(generics.ListCreateAPIView):
@@ -93,3 +95,18 @@ def single_category(request, id):
     item = get_object_or_404(Category, pk=id)
     serialized_item = CategorySerializer(item)
     return Response(serialized_item.data)
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def secret(request):
+    return Response({"message": "Some secret message"})
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def manager_view(request):
+    if request.user.groups.filter(name='Manager').exists():
+        return Response({"message": "Only Manager should see this!"})
+    else:
+        return Response({"message": "You are not authorized."}, 403)
