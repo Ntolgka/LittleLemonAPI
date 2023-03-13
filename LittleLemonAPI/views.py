@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from django.core.paginator import Paginator, EmptyPage
 
 
 # class MenuItemsView(generics.ListCreateAPIView):
@@ -38,6 +39,8 @@ def menu_items(request):
         to_price = request.query_params.get('to_price')
         search = request.query_params.get('search')
         ordering = request.query_params.get('ordering')
+        perpage = request.query_params.get('perpage', default=2)
+        page = request.query_params.get('page', default=1)
         if category_name:
             items = items.filter(category__title__iexact=category_name)
         if to_price:
@@ -47,6 +50,11 @@ def menu_items(request):
         if ordering:
             ordering_fields = ordering.split(",")
             items = items.order_by(*ordering_fields)
+        paginator = Paginator(items, per_page=perpage)
+        try:
+            items = paginator.page(number=page)
+        except EmptyPage:
+            items = []
         serialized_item = MenuItemSerializer(items, many=True)
         return Response(serialized_item.data)
     if (request.method == 'POST'):
