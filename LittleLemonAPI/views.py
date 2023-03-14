@@ -1,13 +1,15 @@
 from rest_framework import generics
 from .models import MenuItem, Category
 from .serializers import MenuItemSerializer, CategorySerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from .throttles import TenCallsPerMinute
 
 
 # class MenuItemsView(generics.ListCreateAPIView):
@@ -110,3 +112,16 @@ def manager_view(request):
         return Response({"message": "Only Manager should see this!"})
     else:
         return Response({"message": "You are not authorized."}, 403)
+
+
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({"message": "Successful."})
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([TenCallsPerMinute])
+def throttle_check_auth(request):
+    return Response({"message": "Only logged in users can see this."})
