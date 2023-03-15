@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'LittleLemonAPI',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -134,6 +135,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_FILTER_CLASSES': [
         'rest_framework.filters.OrderingFilter',
@@ -147,4 +149,8 @@ REST_FRAMEWORK = {
         'user': '5/minute',
         'ten': '10/minute',
     }
+}
+
+DJOSER = {
+    "USER_ID_FIELD": "username",
 }
