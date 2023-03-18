@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import permission_classes
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from .throttles import TenCallsPerMinute
+from django.contrib.auth.models import User, Group
 
 
 # class MenuItemsView(generics.ListCreateAPIView):
@@ -125,3 +126,19 @@ def throttle_check(request):
 @throttle_classes([TenCallsPerMinute])
 def throttle_check_auth(request):
     return Response({"message": "Only logged in users can see this."})
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def managers(request):
+    username = request.data['username']
+    if username:
+        user = get_object_or_404(User, username=username)
+        managers = Group.objects.get(name='Manager')
+        if request.method == 'POST':
+            managers.user_set.add(user)
+            return Response({"message": "User added as manager."})
+        if request.method == 'DELETE':
+            managers.user_set.remove(user)
+            return Response({"message": "User is not a manager anymore."})
+    return Response({"message": "error"}, status.HTTP_400_BAD_REQUEST)
