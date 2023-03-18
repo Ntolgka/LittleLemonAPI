@@ -23,3 +23,5 @@
 - DJOSER - JWT
 - Blacklisting a Token
 - User Account Management
+
+## [The document I prepared during the course and project of this course](https://docs.google.com/document/d/1bBH0Zr5Yac92xMu5oSh8WFMO0FpOJwYQ/edit?usp=sharing&ouid=118310076427750594106&rtpof=true&sd=true).
