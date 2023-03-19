@@ -21,7 +21,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = ['id', 'title', 'price', 'featured', 'stock',
-                  'price_after_tax', 'category', 'category_id']
+                  'price_after_tax', 'category']
 
         extra_kwargs = {
             'price': {'min_value': 1},
