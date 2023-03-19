@@ -128,7 +128,7 @@ def throttle_check_auth(request):
     return Response({"message": "Only logged in users can see this."})
 
 
-@api_view(['POST'])
+@api_view(['POST, DELETE'])
 @permission_classes([IsAdminUser])
 def managers(request):
     username = request.data['username']
