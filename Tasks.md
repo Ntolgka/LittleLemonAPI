@@ -1,20 +1,22 @@
-1. The admin can assign users to the manager group
+1.  ~~ The admin can assign users to the manager group ~~
 
-2. You can access the manager group with an admin token
+- (POST Call) http://127.0.0.1:8000/api/groups/manager/users/
 
-3. The admin can add menu items
+2.  You can access the manager group with an admin token
 
-4. The admin can add categories
+3.  The admin can add menu items
 
-5. Managers can log in
+4.  The admin can add categories
 
-6. Managers can update the item of the day
+5.  Managers can log in
 
-7. Managers can assign users to the delivery crew
+6.  Managers can update the item of the day
 
-8. Managers can assign orders to the delivery crew
+7.  Managers can assign users to the delivery crew
 
-9. The delivery crew can access orders assigned to them
+8.  Managers can assign orders to the delivery crew
+
+9.  The delivery crew can access orders assigned to them
 
 10. The delivery crew can update an order as delivered
 
